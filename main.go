@@ -54,11 +54,14 @@ func fetchKucoinAndAppendToFile(pairSymbol string) {
 
 	filename := fmt.Sprintf("%s.txt", pairSymbol)
 	f, err := os.OpenFile(filename, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0644)
+	if f != nil {
+		defer f.Close()
 
-	jsonOrderBook, _ := json.Marshal(orderbook)
-	_, errF := f.WriteString(string(jsonOrderBook) + "\n")
-	if errF != nil {
-		return
+		jsonOrderBook, _ := json.Marshal(orderbook)
+		_, errF := f.WriteString(string(jsonOrderBook) + "\n")
+		if errF != nil {
+			return
+		}
 	}
 
 }
